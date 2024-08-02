@@ -1,32 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import React, { useContext } from 'react';
+import { View, Text, Button } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 import MyCabScreen from './MyCabScreen';
 
-const ProtectedScreen = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
-
-  if (!isAuthenticated) {
-    return <Text>User not authenticated</Text>;
-  }
+const ProtectedScreen = ({ navigation }) => {
+  const { user, signOut } = useContext(AuthContext);
 
   return (
     <View>
-      <MyCabScreen />
+      {user ? (
+        <>
+          <MyCabScreen />
+          <Button title="Sign Out" onPress={signOut} />
+        </>
+      ) : (
+        <Text>Please sign in to access this screen.</Text>
+      )}
     </View>
   );
 };

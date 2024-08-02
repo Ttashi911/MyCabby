@@ -2,20 +2,16 @@ import React, { createContext, useState, useEffect } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 
-// Create Auth Context
 const AuthContext = createContext();
 
-// Auth Provider Component
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Listen for authentication state changes
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
@@ -23,7 +19,11 @@ const AuthProvider = ({ children }) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
-      console.error('Error signing in: ', error);
+      // Only log errors that are not of a specific type you want to suppress
+      if (error.code !== 'auth/invalid-credential') {
+        console.error('Error signing in: ', error);
+      }
+      throw error; // Re-throw the error to be handled by the calling component
     }
   };
 
@@ -32,6 +32,7 @@ const AuthProvider = ({ children }) => {
       await firebase.auth().createUserWithEmailAndPassword(email, password);
     } catch (error) {
       console.error('Error signing up: ', error);
+      throw error;
     }
   };
 
@@ -40,6 +41,7 @@ const AuthProvider = ({ children }) => {
       await firebase.auth().signOut();
     } catch (error) {
       console.error('Error signing out: ', error);
+      throw error;
     }
   };
 

@@ -7,6 +7,7 @@ import 'firebase/compat/auth';
 import HomeStackScreen from './screens/HomeStackScreen';
 import ProtectedScreen from './screens/ProtectedScreen';
 import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
 import { AuthProvider } from './context/AuthContext';
 
 const Stack = createStackNavigator();
@@ -20,18 +21,20 @@ const App = () => {
       setIsAuthenticated(!!user);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           {isAuthenticated ? (
             <Stack.Screen name="Main" component={MainTabs} />
           ) : (
-            <Stack.Screen name="SignIn" component={SignInScreen} />
+            <>
+              <Stack.Screen name="SignIn" component={SignInScreen} />
+              <Stack.Screen name="SignUp" component={SignUpScreen} />
+            </>
           )}
         </Stack.Navigator>
       </NavigationContainer>

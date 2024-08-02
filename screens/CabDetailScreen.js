@@ -37,17 +37,22 @@ const CabDetailScreen = () => {
     }
   };
 
-  if (!cab) return <Text>Loading...</Text>;
   if (!user) return <Text>Please sign in to book a cab.</Text>;
 
   return (
     <View>
-      <Text>Company: {cab.companyName}</Text>
-      <Text>Model: {cab.carModel}</Text>
-      <Text>Passengers: {cab.passengers}</Text>
-      <Text>Rating: {cab.rating}</Text>
-      <Text>Cost/hour: {cab.costPerHour}</Text>
-      <Button title="Book Cab" onPress={handleBookCab} />
+      {cab ? (
+        <>
+          <Text>Company: {cab.companyName}</Text>
+          <Text>Model: {cab.carModel}</Text>
+          <Text>Passengers: {cab.passengers}</Text>
+          <Text>Rating: {cab.rating}</Text>
+          <Text>Cost/hour: {cab.costPerHour}</Text>
+          <Button title="Book Cab" onPress={handleBookCab} />
+        </>
+      ) : (
+        <Text>Loading...</Text>
+      )}
     </View>
   );
 };

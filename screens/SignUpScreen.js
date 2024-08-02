@@ -2,51 +2,33 @@ import React, { useState, useContext } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 
-const SignInScreen = ({ navigation }) => {
-  const { signIn } = useContext(AuthContext);
+const SignUpScreen = ({ navigation }) => {
+  const { signUp } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     if (!email || !password) {
       Alert.alert('Alert', 'Please enter email and password!');
       return;
     }
-
-    if (!isValidEmail(email)) {
-      Alert.alert('Alert', 'Please enter a valid email address.');
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
-
     try {
-      await signIn(email, password);
-      // Navigate to the next screen or handle successful sign-in
+      await signUp(email, password);
+      navigation.navigate('SignIn');
     } catch (err) {
-      // Handle Firebase authentication errors
-      if (err.code === 'auth/invalid-email') {
-        Alert.alert('Alert', 'The email address is badly formatted.');
-      } else if (err.code === 'auth/wrong-password') {
-        Alert.alert('Alert', 'Incorrect password. Please try again.');
-      } else if (err.code === 'auth/user-not-found') {
-        Alert.alert('Alert', 'No account found with this email address.');
-      } else if (err.code === 'auth/invalid-credential') {
-        // Suppress logging for this error
-        // Display a generic message instead
-        Alert.alert('Alert', 'The email or password is incorrect.');
-      } else {
-        Alert.alert('Alert', 'An unexpected error occurred. Please try again.');
-      }
+      setError(err.message);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -62,8 +44,16 @@ const SignInScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign In" onPress={handleSignIn} />
-      <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+      <Button title="Sign Up" onPress={handleSignUp} />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <Button title="Back to Sign In" onPress={() => navigation.navigate('SignIn')} />
     </View>
   );
 };
@@ -98,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInScreen;
+export default SignUpScreen;
