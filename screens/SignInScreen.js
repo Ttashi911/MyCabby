@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 
 const SignInScreen = ({ navigation }) => {
@@ -25,9 +25,7 @@ const SignInScreen = ({ navigation }) => {
 
     try {
       await signIn(email, password);
-      // Navigate to the next screen or handle successful sign-in
     } catch (err) {
-      // Handle Firebase authentication errors
       if (err.code === 'auth/invalid-email') {
         Alert.alert('Alert', 'The email address is badly formatted.');
       } else if (err.code === 'auth/wrong-password') {
@@ -35,8 +33,6 @@ const SignInScreen = ({ navigation }) => {
       } else if (err.code === 'auth/user-not-found') {
         Alert.alert('Alert', 'No account found with this email address.');
       } else if (err.code === 'auth/invalid-credential') {
-        // Suppress logging for this error
-        // Display a generic message instead
         Alert.alert('Alert', 'The email or password is incorrect.');
       } else {
         Alert.alert('Alert', 'An unexpected error occurred. Please try again.');
@@ -46,7 +42,7 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>My Cabby</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -62,8 +58,14 @@ const SignInScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign In" onPress={handleSignIn} />
-      <Button title="Sign Up" onPress={() => navigation.navigate('SignUp')} />
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={[styles.button, styles.signInButton]} onPress={handleSignIn}>
+          <Text style={styles.buttonTitle}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.signUpButton]} onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.buttonTitle}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -72,29 +74,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#f8f9fa',
+    padding: 24,
+    backgroundColor: '#f0f4f8',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 24,
+    marginBottom: 32,
     textAlign: 'center',
-    color: '#343a40',
+    color: '#333',
   },
   input: {
-    height: 40,
-    borderColor: '#ced4da',
+    height: 50,
+    borderColor: '#d1d5db',
     borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 16,
   },
-  error: {
-    marginTop: 8,
-    color: '#e63946',
-    textAlign: 'center',
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 8,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  signInButton: {
+    backgroundColor: '#007bff',
+  },
+  signUpButton: {
+    backgroundColor: '#007bff',
+  },
+  buttonTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
   },
 });
 

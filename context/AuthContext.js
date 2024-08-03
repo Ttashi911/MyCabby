@@ -19,11 +19,10 @@ const AuthProvider = ({ children }) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
-      // Only log errors that are not of a specific type you want to suppress
       if (error.code !== 'auth/invalid-credential') {
         console.error('Error signing in: ', error);
       }
-      throw error; // Re-throw the error to be handled by the calling component
+      throw error; 
     }
   };
 

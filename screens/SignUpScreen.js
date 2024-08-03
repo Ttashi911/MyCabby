@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 
 const SignUpScreen = ({ navigation }) => {
@@ -28,7 +28,7 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.title}>My Cabby</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -51,9 +51,15 @@ const SignUpScreen = ({ navigation }) => {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      <Button title="Sign Up" onPress={handleSignUp} />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title="Back to Sign In" onPress={() => navigation.navigate('SignIn')} />
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={[styles.button, styles.signUpButton]} onPress={handleSignUp}>
+          <Text style={styles.buttonTitle}>Sign Up</Text>
+        </TouchableOpacity>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <TouchableOpacity style={[styles.button, styles.backButton]} onPress={() => navigation.navigate('SignIn')}>
+          <Text style={styles.buttonTitle}>Back</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -62,29 +68,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#f8f9fa',
+    padding: 24,
+    backgroundColor: '#f0f4f8',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 24,
+    marginBottom: 32,
     textAlign: 'center',
-    color: '#343a40',
+    color: '#333',
   },
   input: {
-    height: 40,
-    borderColor: '#ced4da',
+    height: 50,
+    borderColor: '#d1d5db',
     borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 16,
+  },
+  button: {
+    paddingVertical: 8, 
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 120,
+    marginHorizontal: 4, 
+  },
+  signUpButton: {
+    backgroundColor: '#007bff',
+  },
+  backButton: {
+    backgroundColor: '#007bff', 
+  },
+  buttonTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
   },
   error: {
     marginTop: 8,
     color: '#e63946',
     textAlign: 'center',
+    fontSize: 14,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', 
+    marginTop: 16,
   },
 });
 

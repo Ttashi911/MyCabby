@@ -45,7 +45,7 @@ const App = () => {
 const MainTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Home" component={HomeStackScreen} />
-    <Tab.Screen name="My Cab" component={ProtectedScreen} />
+    <Tab.Screen name="My Ride" component={ProtectedScreen} />
   </Tab.Navigator>
 );
 
