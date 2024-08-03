@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
-      // Handle errors gracefully here without logging to the console
       throw error; 
     }
   };
@@ -28,7 +27,6 @@ const AuthProvider = ({ children }) => {
     try {
       await firebase.auth().createUserWithEmailAndPassword(email, password);
     } catch (error) {
-      // Handle errors gracefully here without logging to the console
       throw error;
     }
   };
@@ -38,7 +36,6 @@ const AuthProvider = ({ children }) => {
       await firebase.auth().signOut();
       setUser(null);
     } catch (error) {
-      // Handle errors gracefully here without logging to the console
     }
   };
 
