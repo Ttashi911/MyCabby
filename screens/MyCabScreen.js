@@ -1,26 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, FlatList, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { getUserBookings, cancelBooking } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 
-const MyCabScreen = () => {
+const MyCabScreen = ({ refreshBookings }) => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      const userBookings = await getUserBookings();
-      setBookings(userBookings);
-      setLoading(false);
-    };
-    fetchBookings();
-  }, []);
+  const fetchBookings = async () => {
+    setLoading(true);
+    const userBookings = await getUserBookings();
+    setBookings(userBookings);
+    setLoading(false);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBookings();
+    }, [refreshBookings])
+  );
 
   const handleCancelBooking = async (bookingId) => {
     await cancelBooking(bookingId);
-    const updatedBookings = bookings.filter(booking => booking.id !== bookingId);
-    setBookings(updatedBookings);
+    fetchBookings();
     alert('Booking cancelled successfully!');
   };
 

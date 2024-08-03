@@ -9,20 +9,52 @@ const SignUpScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
+  const isValidEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleSignUp = async () => {
     if (!email || !password) {
       Alert.alert('Alert', 'Please enter email and password!');
       return;
     }
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+
+    if (!isValidEmail(email)) {
+      Alert.alert('Invalid Email', 'The email address is badly formatted.');
       return;
     }
+
+    if (password.length < 6) {
+      Alert.alert('Password Error', 'The password is too weak. Please use at least 6 characters.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Alert', 'Passwords do not match');
+      return;
+    }
+
     try {
       await signUp(email, password);
       navigation.navigate('SignIn');
     } catch (err) {
-      setError(err.message);
+      let errorMessage = 'An error occurred. Please try again.';
+      
+      if (err.code === 'auth/invalid-email') {
+        errorMessage = 'The email address is not valid.';
+      } else if (err.code === 'auth/email-already-in-use') {
+        errorMessage = 'The email address is already in use.';
+      } else if (err.code === 'auth/weak-password') {
+        errorMessage = 'The password is too weak. Please use at least 6 characters.';
+      } else if (err.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password.';
+      } else if (err.code === 'auth/user-not-found') {
+        errorMessage = 'No user found with this email.';
+      }
+
+      Alert.alert('Sign Up Error', errorMessage);
+      setError('');
     }
   };
 
@@ -55,11 +87,11 @@ const SignUpScreen = ({ navigation }) => {
         <TouchableOpacity style={[styles.button, styles.signUpButton]} onPress={handleSignUp}>
           <Text style={styles.buttonTitle}>Sign Up</Text>
         </TouchableOpacity>
-        {error ? <Text style={styles.error}>{error}</Text> : null}
         <TouchableOpacity style={[styles.button, styles.backButton]} onPress={() => navigation.navigate('SignIn')}>
           <Text style={styles.buttonTitle}>Back</Text>
         </TouchableOpacity>
       </View>
+      {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 };
@@ -107,16 +139,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
-  error: {
-    marginTop: 8,
-    color: '#e63946',
-    textAlign: 'center',
-    fontSize: 14,
-  },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between', 
     marginTop: 16,
+  },
+  error: {
+    marginTop: 16,
+    color: '#e63946',
+    textAlign: 'center',
+    fontSize: 14,
   },
 });
 
