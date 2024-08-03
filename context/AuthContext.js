@@ -38,9 +38,9 @@ const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       await firebase.auth().signOut();
+      setUser(null);
     } catch (error) {
-      console.error('Error signing out: ', error);
-      throw error;
+      console.error('Error signing out:', error);
     }
   };
 

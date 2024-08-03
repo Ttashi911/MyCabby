@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Button, FlatList, ActivityIndicator, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { getUserBookings, cancelBooking } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 
@@ -61,11 +61,25 @@ const MyCabScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.bookingItem}>
-            <Text style={styles.label}>Company: <Text style={styles.value}>{item.companyName}</Text></Text>
-            <Text style={styles.label}>Model: <Text style={styles.value}>{item.carModel}</Text></Text>
-            <Text style={styles.label}>Cost/hour: <Text style={styles.value}>{item.costPerHour}</Text></Text>
+            <View style={styles.detailContainer}>
+              <Text style={styles.label}>Company:</Text>
+              <Text style={styles.value}>{item.companyName}</Text>
+            </View>
+            <View style={styles.detailContainer}>
+              <Text style={styles.label}>Model:</Text>
+              <Text style={styles.value}>{item.carModel}</Text>
+            </View>
+            <View style={styles.detailContainer}>
+              <Text style={styles.label}>Cost/hour:</Text>
+              <Text style={styles.value}>{item.costPerHour}</Text>
+            </View>
             <View style={styles.buttonContainer}>
-              <Button title="Cancel Booking" onPress={() => handleCancelBooking(item.id)} color="#ffffff" />
+              <TouchableOpacity 
+                style={styles.button}
+                onPress={() => handleCancelBooking(item.id)}
+              >
+                <Text style={styles.buttonText}>Cancel Booking</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -80,10 +94,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f8f9fa',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   bookingItem: {
-    padding: 16,
-    marginBottom: 16,
+    width: 300,
+    maxWidth: 500,
+    padding: 20,
+    marginBottom: 20,
     backgroundColor: '#ffffff',
     borderRadius: 8,
     shadowColor: '#000000',
@@ -91,26 +109,52 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 2,
+    alignItems: 'center',
+  },
+  detailContainer: {
+    flexDirection: 'row',
+    marginBottom: 10, // Space between label and value
+    width: '100%',
+    justifyContent: 'space-between',
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 4,
   },
   value: {
-    fontWeight: 'normal',
+    fontSize: 16,
     color: '#333',
+    marginLeft: 70, // Add space between label and value
   },
   message: {
     fontSize: 16,
     textAlign: 'center',
-    marginVertical: 16,
+    marginVertical: 20,
   },
   buttonContainer: {
-    marginTop: 12,
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  button: {
+    width: '100%',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 8,
-    overflow: 'hidden',
     backgroundColor: '#ff6347',
+    borderWidth: 1,
+    borderColor: '#ff6347',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#ffffff',
   },
 });
 

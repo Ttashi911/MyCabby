@@ -107,10 +107,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signInButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6347',
   },
   signUpButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6347',
   },
   buttonTitle: {
     fontSize: 16,

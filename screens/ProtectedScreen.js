@@ -11,9 +11,7 @@ const ProtectedScreen = () => {
       {user ? (
         <>
           <MyCabScreen />
-          <View style={styles.buttonContainer}>
-            <Button title="Sign Out" onPress={signOut} color="#ffffff" />
-          </View>
+
         </>
       ) : (
         <Text style={styles.message}>Please sign in to access this screen.</Text>

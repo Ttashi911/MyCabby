@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { getCabDetail, bookCab, getUserBookings } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
-import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon component
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const CabDetailScreen = () => {
   const route = useRoute();
@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f8f9fa',
-    justifyContent: 'flex-start', // Align content to the top
-    alignItems: 'center', // Center content horizontally
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   detailsContainer: {
     width: '100%',
-    maxWidth: 275, // Optional: adjust the max width as needed
+    maxWidth: 275,
     padding: 16,
     backgroundColor: '#ffffff',
     borderRadius: 8,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6347',
     borderRadius: 8,
     alignItems: 'center',
   },

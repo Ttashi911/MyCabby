@@ -129,10 +129,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 4, 
   },
   signUpButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6347',
   },
   backButton: {
-    backgroundColor: '#007bff', 
+    backgroundColor: '#ff6347', 
   },
   buttonTitle: {
     fontSize: 16,
