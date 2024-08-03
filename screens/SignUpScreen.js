@@ -7,7 +7,6 @@ const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
 
   const isValidEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,7 +39,6 @@ const SignUpScreen = ({ navigation }) => {
       navigation.navigate('SignIn');
     } catch (err) {
       let errorMessage = 'An error occurred. Please try again.';
-      
       if (err.code === 'auth/invalid-email') {
         errorMessage = 'The email address is not valid.';
       } else if (err.code === 'auth/email-already-in-use') {
@@ -52,9 +50,7 @@ const SignUpScreen = ({ navigation }) => {
       } else if (err.code === 'auth/user-not-found') {
         errorMessage = 'No user found with this email.';
       }
-
       Alert.alert('Sign Up Error', errorMessage);
-      setError('');
     }
   };
 
@@ -91,7 +87,6 @@ const SignUpScreen = ({ navigation }) => {
           <Text style={styles.buttonTitle}>Back</Text>
         </TouchableOpacity>
       </View>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 };
@@ -143,12 +138,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between', 
     marginTop: 16,
-  },
-  error: {
-    marginTop: 16,
-    color: '#e63946',
-    textAlign: 'center',
-    fontSize: 14,
   },
 });
 

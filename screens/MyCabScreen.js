@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   detailContainer: {
     flexDirection: 'row',
-    marginBottom: 10, // Space between label and value
+    marginBottom: 10,
     width: '100%',
     justifyContent: 'space-between',
   },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 16,
     color: '#333',
-    marginLeft: 70, // Add space between label and value
+    marginLeft: 70,
   },
   message: {
     fontSize: 16,

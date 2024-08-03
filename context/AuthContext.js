@@ -19,9 +19,7 @@ const AuthProvider = ({ children }) => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
-      if (error.code !== 'auth/invalid-credential') {
-        console.error('Error signing in: ', error);
-      }
+      // Handle errors gracefully here without logging to the console
       throw error; 
     }
   };
@@ -30,7 +28,7 @@ const AuthProvider = ({ children }) => {
     try {
       await firebase.auth().createUserWithEmailAndPassword(email, password);
     } catch (error) {
-      console.error('Error signing up: ', error);
+      // Handle errors gracefully here without logging to the console
       throw error;
     }
   };
@@ -40,7 +38,7 @@ const AuthProvider = ({ children }) => {
       await firebase.auth().signOut();
       setUser(null);
     } catch (error) {
-      console.error('Error signing out:', error);
+      // Handle errors gracefully here without logging to the console
     }
   };
 
