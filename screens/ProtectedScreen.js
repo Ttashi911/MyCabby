@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import MyCabScreen from './MyCabScreen';
 
@@ -7,17 +7,38 @@ const ProtectedScreen = () => {
   const { user, signOut } = useContext(AuthContext);
 
   return (
-    <View>
+    <View style={styles.container}>
       {user ? (
         <>
           <MyCabScreen />
-          <Button title="Sign Out" onPress={signOut} />
+          <View style={styles.buttonContainer}>
+            <Button title="Sign Out" onPress={signOut} color="#ffffff" />
+          </View>
         </>
       ) : (
-        <Text>Please sign in to access this screen.</Text>
+        <Text style={styles.message}>Please sign in to access this screen.</Text>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f8f9fa',
+  },
+  message: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 16,
+  },
+  buttonContainer: {
+    marginTop: 16,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#007bff',
+  },
+});
 
 export default ProtectedScreen;

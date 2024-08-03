@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import { Ionicons } from 'react-native-vector-icons'; // Import Ionicons
+
 import HomeStackScreen from './screens/HomeStackScreen';
 import ProtectedScreen from './screens/ProtectedScreen';
 import SignInScreen from './screens/SignInScreen';
@@ -43,7 +45,23 @@ const App = () => {
 };
 
 const MainTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = 'home';
+        } else if (route.name === 'My Ride') {
+          iconName = 'car';
+        }
+
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: 'tomato',
+      tabBarInactiveTintColor: 'gray',
+    })}
+  >
     <Tab.Screen name="Home" component={HomeStackScreen} />
     <Tab.Screen name="My Ride" component={ProtectedScreen} />
   </Tab.Navigator>

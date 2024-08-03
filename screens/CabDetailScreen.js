@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { getCabDetail, bookCab, getUserBookings } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
+import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon component
 
 const CabDetailScreen = () => {
   const route = useRoute();
@@ -42,14 +43,36 @@ const CabDetailScreen = () => {
   return (
     <View style={styles.container}>
       {cab ? (
-        <>
-          <Text style={styles.label}>Company: <Text style={styles.value}>{cab.companyName}</Text></Text>
-          <Text style={styles.label}>Model: <Text style={styles.value}>{cab.carModel}</Text></Text>
-          <Text style={styles.label}>Passengers: <Text style={styles.value}>{cab.passengers}</Text></Text>
-          <Text style={styles.label}>Rating: <Text style={styles.value}>{cab.rating}</Text></Text>
-          <Text style={styles.label}>Cost/hour: <Text style={styles.value}>{cab.costPerHour}</Text></Text>
-          <Button title="Book Ride" onPress={handleBookCab} />
-        </>
+        <View style={styles.detailsContainer}>
+          <View style={styles.detailItem}>
+            <Icon name="car" size={24} color="black" />
+            <Text style={styles.label}>Company: </Text>
+            <Text style={styles.value}>{cab.companyName}</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Icon name="settings" size={24} color="black" />
+            <Text style={styles.label}>Model: </Text>
+            <Text style={styles.value}>{cab.carModel}</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Icon name="people" size={24} color="black" />
+            <Text style={styles.label}>Passengers: </Text>
+            <Text style={styles.value}>{cab.passengers}</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Icon name="star" size={24} color="black" />
+            <Text style={styles.label}>Rating: </Text>
+            <Text style={styles.value}>{cab.rating}</Text>
+          </View>
+          <View style={styles.detailItem}>
+            <Icon name="cash-outline" size={24} color="black" />
+            <Text style={styles.label}>Cost/hour: </Text>
+            <Text style={styles.value}>{cab.costPerHour}</Text>
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleBookCab}>
+            <Text style={styles.buttonText}>Book Ride</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
         <Text style={styles.message}>Loading...</Text>
       )}
@@ -62,14 +85,48 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f8f9fa',
+    justifyContent: 'flex-start', // Align content to the top
+    alignItems: 'center', // Center content horizontally
+  },
+  detailsContainer: {
+    width: '100%',
+    maxWidth: 275, // Optional: adjust the max width as needed
+    padding: 16,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    shadowColor: '#000000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  detailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginLeft: 10,
+    flex: 1,
   },
   value: {
-    fontWeight: 'normal',
+    fontSize: 16,
+    color: '#333',
+  },
+  button: {
+    marginTop: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#007bff',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   message: {
     fontSize: 16,
