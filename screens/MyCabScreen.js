@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { getUserBookings, cancelBooking } from '../firebase';
+import { db, getCabDetail, cancelBooking } from '../firebase'; // Import getCabDetail
 import { AuthContext } from '../context/AuthContext';
 
 const MyCabScreen = () => {
@@ -9,20 +9,33 @@ const MyCabScreen = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      setLoading(true);
-      try {
-        const userBookings = await getUserBookings();
-        setBookings(userBookings);
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!user) return;
 
-    fetchBookings();
-  }, []);
+    const userId = user.uid;
+    const unsubscribe = db.collection('bookings')
+      .where('userId', '==', userId)
+      .onSnapshot(async snapshot => {
+        try {
+          const updatedBookings = await Promise.all(snapshot.docs.map(async doc => {
+            const bookingData = doc.data();
+            const cabDetail = await getCabDetail(bookingData.cabId);
+            return { id: doc.id, ...bookingData, cabDetail };
+          }));
+          setBookings(updatedBookings);
+        } catch (error) {
+          console.error('Error fetching bookings:', error);
+          Alert.alert('Error', 'Failed to load bookings.');
+        } finally {
+          setLoading(false);
+        }
+      }, error => {
+        console.error('Error fetching bookings:', error);
+        setLoading(false);
+      });
+
+    // Clean up the listener on component unmount
+    return () => unsubscribe();
+  }, [user]);
 
   const handleCancelBooking = (bookingId) => {
     Alert.alert(
@@ -38,8 +51,7 @@ const MyCabScreen = () => {
           onPress: async () => {
             try {
               await cancelBooking(bookingId);
-              const updatedBookings = bookings.filter(booking => booking.id !== bookingId);
-              setBookings(updatedBookings);
+              // Since we are using a real-time listener, the booking list will automatically update
               alert('Booking cancelled successfully!');
             } catch (error) {
               console.error('Error cancelling booking:', error);
@@ -63,15 +75,15 @@ const MyCabScreen = () => {
           <View style={styles.bookingItem}>
             <View style={styles.detailContainer}>
               <Text style={styles.label}>Company:</Text>
-              <Text style={styles.value}>{item.companyName}</Text>
+              <Text style={styles.value}>{item.cabDetail?.companyName || 'N/A'}</Text>
             </View>
             <View style={styles.detailContainer}>
               <Text style={styles.label}>Model:</Text>
-              <Text style={styles.value}>{item.carModel}</Text>
+              <Text style={styles.value}>{item.cabDetail?.carModel || 'N/A'}</Text>
             </View>
             <View style={styles.detailContainer}>
               <Text style={styles.label}>Cost/hour:</Text>
-              <Text style={styles.value}>{item.costPerHour}</Text>
+              <Text style={styles.value}>{item.cabDetail?.costPerHour || 'N/A'}</Text>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity 

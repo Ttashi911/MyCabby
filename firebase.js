@@ -19,6 +19,9 @@ if (!firebase.apps.length) {
 
 const db = firebase.firestore();
 
+export { db };
+
+
 export const getCabs = async () => {
   try {
     const snapshot = await db.collection('cabs').get();
